@@ -8,4 +8,4 @@ API_KEY = (
 
 BOTNAME = "@gcetsupportbot"
 ENV = "DEV"
-MADEBY = "Ved Gupta"
+MADEBY = "Amit Akash"

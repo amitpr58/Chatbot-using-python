@@ -8,8 +8,11 @@ from telegram.ext import (
     filters,
 )
 from .handles import facts_to_str
+import uuid
 
-Name, Email, Contact  = range(3)
+MADEBY="Amit Akash"
+
+Name, Email, Contact, Question  = range(4)
 
 async def add_name(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data["Name"] = update.message.text
@@ -27,7 +30,26 @@ async def add_email(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def add_mobile(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data["Contact"] = update.message.text
-    print(context.user_data)
+    await update.message.reply_text(
+        "Enter you Query/Question regarding College ?",
+    )
+    return Question
+
+async def InputOuestion(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    id = str(uuid.uuid1())[:7]
+    with open("data.txt" , "a")as f:
+        f.writelines(
+f"""
+Ticket : {id}
+Name : {context.user_data["Name"]}
+Email : {context.user_data["Email"]}
+Mobile Number : {context.user_data["Contact"]}
+Question : {update.message.text}
+,
+
+"""
+        )
+    await update.message.reply_text(f"Your ticket id : {id}\n We will get back to you regarding Query/Question")
     return ConversationHandler.END
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -53,7 +75,7 @@ async def myinfo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Start Function"""
     await update.message.reply_text(
-        f"Hey! {update.effective_user.first_name}! I am GCET support Bot build by - Ved Gupta"
+        f"Hey! {update.effective_user.first_name}! I am GCET support Bot build by - {MADEBY}"
     )
     await update.message.reply_text("Welcome,\nI well connected you to live agent to help with adocking station. \nDon't share any type of Bank detail")
     await update.message.reply_text("What is your name?")
@@ -67,8 +89,7 @@ async def done(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         del user_data["choice"]
 
     await update.message.reply_text(
-        f"Your Information - : {facts_to_str(user_data)}",
-        reply_markup=ReplyKeyboardRemove(),
+        f"Your Information - : {facts_to_str(user_data)}"
     )
 
 async def end_convo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:

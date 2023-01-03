@@ -7,7 +7,7 @@ name = "pypi"
 yfinance = "*"
 install = "*"
 pytelegrambotapi = "*"
-black = "*"
+uuid = "*"
 python-telegram-bot = "*"
 
 [dev-packages]

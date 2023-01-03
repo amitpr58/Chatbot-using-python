@@ -15,6 +15,7 @@ from helpers.utils import (
     add_name,
     add_email,
     add_mobile,
+    InputOuestion,
     hello,
     myinfo,
     done,
@@ -30,7 +31,7 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
-Name, Email, Contact = range(3)
+Name, Email, Contact, Question = range(4)
 
 
 bot = ApplicationBuilder().token(API_KEY).build()
@@ -56,6 +57,12 @@ conv_handler = ConversationHandler(
                 add_mobile,
             ),
         ],
+        Question:[
+            MessageHandler(
+                filters.TEXT,
+                InputOuestion,
+            ),
+        ]
     },
     fallbacks=[MessageHandler(filters.Regex("^Done$"), done)],
 )
